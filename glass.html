@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Glass Style Social Messaging App</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    }
+
+    /* ===== App Layout ===== */
+    .app {
+      width: 760px;
+      height: 620px;
+      display: flex;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(18px);
+      border-radius: 24px;
+      border: 1.5px solid rgba(255, 255, 255, 0.35);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+    }
+
+    /* ===== Contacts Panel ===== */
+    .contacts {
+      width: 260px;
+      border-right: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(16px);
+    }
+
+    .contacts h3 {
+      margin: 0;
+      padding: 16px;
+      color: #fff;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .contact {
+      padding: 14px 16px;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .contact:hover,
+    .contact.active {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    /* ===== Chat Section ===== */
+    .chat {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      padding: 16px;
+      text-align: center;
+      color: #ffffff;
+      font-weight: 600;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .chat-area {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+    }
+
+    .message {
+      max-width: 70%;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      border-radius: 16px;
+      font-size: 14px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+    }
+
+    .user {
+      margin-left: auto;
+      background: rgba(0, 200, 255, 0.25);
+      color: #fff;
+      border-top-right-radius: 4px;
+    }
+
+    .friend {
+      margin-right: auto;
+      background: rgba(255, 255, 255, 0.25);
+      color: #fff;
+      border-top-left-radius: 4px;
+    }
+
+    .input-area {
+      display: flex;
+      padding: 12px;
+      gap: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(14px);
+    }
+
+    .input-area input {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 20px;
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      outline: none;
+    }
+
+    .input-area button {
+      padding: 10px 16px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255, 255, 255, 0.45);
+      background: rgba(0, 200, 255, 0.35);
+      color: #fff;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+
+    <!-- Contacts -->
+    <div class="contacts">
+      <h3>Chats</h3>
+      <div class="contact active" onclick="openChat('Alice')">Alice</div>
+      <div class="contact" onclick="openChat('Bob')">Bob</div>
+      <div class="contact" onclick="openChat('Charlie')">Charlie</div>
+    </div>
+
+    <!-- Chat Window -->
+    <div class="chat">
+      <div class="header" id="chatHeader">Alice</div>
+      <div class="chat-area" id="chatArea"></div>
+      <div class="input-area">
+        <input type="text" id="messageInput" placeholder="Type a message..." />
+        <button onclick="sendMessage()">➤</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const chats = {
+      Alice: ["Hi! 👋", "Nice glass UI, right?"] ,
+      Bob: ["Hey there!", "Working on a new app?"] ,
+      Charlie: ["Hello 👀", "This looks futuristic ✨"]
+    };
+
+    let currentChat = 'Alice';
+    const chatArea = document.getElementById('chatArea');
+    const chatHeader = document.getElementById('chatHeader');
+    const input = document.getElementById('messageInput');
+
+    function loadChat(name) {
+      chatArea.innerHTML = '';
+      chats[name].forEach(msg => {
+        const div = document.createElement('div');
+        div.className = 'message friend';
+        div.textContent = msg;
+        chatArea.appendChild(div);
+      });
+    }
+
+    function openChat(name) {
+      currentChat = name;
+      chatHeader.textContent = name;
+      document.querySelectorAll('.contact').forEach(c => c.classList.remove('active'));
+      event.target.classList.add('active');
+      loadChat(name);
+    }
+
+    function sendMessage() {
+      const text = input.value.trim();
+      if (!text) return;
+
+      const div = document.createElement('div');
+      div.className = 'message user';
+      div.textContent = text;
+      chatArea.appendChild(div);
+      input.value = '';
+      chatArea.scrollTop = chatArea.scrollHeight;
+    }
+
+    loadChat(currentChat);
+  </script>
+</body>
+</html>
